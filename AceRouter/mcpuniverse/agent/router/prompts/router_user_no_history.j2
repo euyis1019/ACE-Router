@@ -1,0 +1,23 @@
+Current user query:
+<current query>"{{QUERY}}"</current query>
+
+Available MCP tools:
+<tools>{{TOOLS_JSON}}</tools>
+
+Task:
+<task>
+Analyze the current query and tool descriptions.
+Return the top most relevant tool based on their descriptions and schemas.
+</task>
+
+Output requirements:
+###
+- First, think through your reasoning inside <think></think> tags
+- Then output only one tool name as a JSON array
+- Format:
+<think>
+Your reasoning about which tool to select...
+</think>
+
+["tool_name"]
+###
