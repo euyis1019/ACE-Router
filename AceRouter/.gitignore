@@ -1,0 +1,58 @@
+# --- Project-specific exclusions ---
+# Private / local directories at the repo root (leading slash anchors the pattern
+# so that sub-directories with the same name elsewhere -- e.g.
+# MCP-Universe/mcpuniverse/benchmark/configs/mcpmark/ -- are NOT ignored).
+/mcpmark/
+/ours/
+/vitabench/
+
+# Working notes / plans.
+/plan.md
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# --- Environments & secrets ---
+.env
+.env.*
+!.env.example
+.venv
+venv/
+env/
+
+# --- Testing / caching ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Runtime artifacts ---
+log/
+logs/
+*.log
+
+# --- Benchmark test environments ---
+test_environments/
+temp_environments/
+github_state/
+tests/data/postgres/
+tests/data/playwright_webarena/
+
+# --- Blender / evaluator artifacts ---
+mcpuniverse/evaluator/blender/check_functions/evaluated_results/
+mcpuniverse/evaluator/blender/blend_files/
