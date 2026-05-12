@@ -1,0 +1,42 @@
+# Smoke-test benchmark for DynamicReAct on MCPMark side.
+# Mirrors mcpmark_filesystem.yaml but uses DynamicReAct with a ToolRouter.
+# Limited to a single task for quick verification.
+
+kind: llm
+spec:
+  name: reasoning-llm
+  type: openai
+  config:
+    model_name: gpt-4o
+    temperature: 0.0
+
+---
+kind: agent
+spec:
+  name: dynamic-react-agent
+  type: dynamic_react
+  config:
+    llm: reasoning-llm
+    instruction: You are an agent for filesystem operations and file management tasks.
+    prompt_version: v1
+    max_iterations: 20
+    summarize_tool_response: false
+    router:
+      mode: llm
+      max_tools: 3
+      enable_history: true
+      history_version: v1
+      llm:
+        type: openai
+        config:
+          model_name: gpt-4o-mini
+          temperature: 1.0
+          seed: 42
+
+---
+kind: benchmark
+spec:
+  description: DynamicReAct smoke test on a single MCPMark filesystem task.
+  agent: dynamic-react-agent
+  tasks:
+    - mcpmark/tasks/filesystem/desktop/timeline_extraction.json

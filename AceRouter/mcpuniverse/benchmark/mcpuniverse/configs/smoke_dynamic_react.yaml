@@ -1,0 +1,49 @@
+# Smoke-test benchmark for DynamicReAct on MCP-Universe side.
+# Mirrors dummy/benchmark_1.yaml (single weather task), but uses DynamicReAct with a ToolRouter.
+
+kind: llm
+spec:
+  name: reasoning-llm
+  type: openai
+  config:
+    model_name: gpt-5.4
+    temperature: 0.0
+    api_key: "<REDACTED_OPENAI_API_KEY>"
+    base_url: "https://<REDACTED_OPENAI_BASE_URL>/v1"
+
+---
+# Router LLM: independent from the reasoning LLM.
+# (Not a framework "component" – DynamicReActConfig.router.llm is a plain dict.)
+kind: agent
+spec:
+  name: dynamic-react-agent
+  type: dynamic_react
+  config:
+    llm: reasoning-llm
+    instruction: You are an agent for weather forecasting.
+    prompt_version: v1
+    max_iterations: 10
+    summarize_tool_response: true
+    servers:
+      - name: weather
+    router:
+      mode: llm
+      max_tools: 3
+      enable_history: true
+      history_version: v1
+      llm:
+        type: openai
+        config:
+          model_name: gpt-5.4
+          temperature: 1.0
+          seed: 42
+          api_key: "<REDACTED_OPENAI_API_KEY>"
+          base_url: "https://<REDACTED_OPENAI_BASE_URL>/v1"
+
+---
+kind: benchmark
+spec:
+  description: DynamicReAct smoke test on weather task.
+  agent: dynamic-react-agent
+  tasks:
+    - mcpuniverse/tasks/smoke/weather_1.json
