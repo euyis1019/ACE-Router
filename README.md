@@ -28,4 +28,25 @@ We propose **ACE-Router**, a pipeline for training **history-aware routers** to 
 
 ## Code
 
-> **Code is coming within a few weeks.**
+The inference and evaluation code is now available under [`AceRouter/`](AceRouter/). See [`AceRouter/README.md`](AceRouter/README.md) for setup, the smoke test, and how to plug in your own router model.
+
+```bash
+cd AceRouter
+conda create -n toolace python=3.11 -y && conda activate toolace
+conda install -c conda-forge nodejs -y
+pip install -e .
+```
+
+## Citation
+
+```bibtex
+@misc{yao2026aceroutergeneralizinghistoryawarerouting,
+      title={ACE-Router: Generalizing History-Aware Routing from MCP Tools to the Agent Web},
+      author={Zhiyuan Yao and Zishan Xu and Yifu Guo and Zhiguang Han and Cheng Yang and Shuo Zhang and Weinan Zhang and Xingshan Zeng and Weiwen Liu},
+      year={2026},
+      eprint={2601.08276},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2601.08276},
+}
+```
