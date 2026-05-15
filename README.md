@@ -40,13 +40,12 @@ pip install -e .
 ## Citation
 
 ```bibtex
-@misc{yao2026aceroutergeneralizinghistoryawarerouting,
-      title={ACE-Router: Generalizing History-Aware Routing from MCP Tools to the Agent Web},
-      author={Zhiyuan Yao and Zishan Xu and Yifu Guo and Zhiguang Han and Cheng Yang and Shuo Zhang and Weinan Zhang and Xingshan Zeng and Weiwen Liu},
-      year={2026},
-      eprint={2601.08276},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2601.08276},
+@misc{acerouter2026,
+  title={ACE-Router: Generalizing History-Aware Routing from MCP Tools to the Agent Web},
+  author={Zhiyuan Yao and Zishan Xu and Yifu Guo and Zhiguang Han and Cheng Yang and
+          Shuo Zhang and Weinan Zhang and Xingshan Zeng and Weiwen Liu},
+  year={2026},
+  eprint={2601.08276},
+  archivePrefix={arXiv},
 }
 ```
