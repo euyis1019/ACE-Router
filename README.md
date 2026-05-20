@@ -8,11 +8,6 @@
 
 </div>
 
-## 🚀 News
-
-- **[2026-05-13]** We released the code and paper for ACE-Router.
-- **[Coming Soon]** Data and model weights will be released. Stay tuned!
-
 ## Overview
 
 With the rise of the **Agent Web** and **Model Context Protocol (MCP)**, the agent ecosystem is evolving into an open collaborative network, exponentially increasing accessible tools. However, current architectures face severe scalability and generality bottlenecks.
@@ -30,6 +25,11 @@ We propose **ACE-Router**, a pipeline for training **history-aware routers** to 
 - **Light Routing Agent** -- A plug-and-play module that seamlessly integrates the trained router into existing agent pipelines.
 - **Cross-domain Transferability** -- A router trained solely on tool data generalizes to multi-agent collaboration with minimal adaptation.
 - **Robustness & Scalability** -- Maintains exceptional robustness against noise and scales effectively to massive candidate spaces.
+
+## 🚀 News
+
+- **[2026-05-13]** We released the code and paper for ACE-Router.
+- **[Coming Soon]** Data and model weights will be released. Stay tuned!
 
 ## Code
 
