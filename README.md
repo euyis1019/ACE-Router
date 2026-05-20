@@ -4,7 +4,7 @@
 
 **Accepted to ACL 2026 Main Conference (Oral)**
 
-[[Paper]](https://arxiv.org/abs/2601.08276)
+[[Paper]](https://arxiv.org/abs/2601.08276) [[Project Page]](https://euyis1019.github.io/ACE-Router/)
 
 </div>
 
