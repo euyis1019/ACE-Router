@@ -8,6 +8,11 @@
 
 </div>
 
+## 🚀 News
+
+- **[2026-05-13]** We released the code and paper for ACE-Router.
+- **[Coming Soon]** Data and model weights will be released. Stay tuned!
+
 ## Overview
 
 With the rise of the **Agent Web** and **Model Context Protocol (MCP)**, the agent ecosystem is evolving into an open collaborative network, exponentially increasing accessible tools. However, current architectures face severe scalability and generality bottlenecks.
@@ -36,6 +41,13 @@ conda create -n toolace python=3.11 -y && conda activate toolace
 conda install -c conda-forge nodejs -y
 pip install -e .
 ```
+
+## 🙏 Acknowledgement
+
+- [MCP-Universe](https://github.com/SalesforceAIResearch/MCP-Universe): For the evaluation framework and benchmarks.
+- [MCPMark](https://github.com/eval-sys/mcpmark): For the evaluation benchmarks.
+- [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory): For the SFT implementation.
+- [Qwen](https://github.com/QwenLM/Qwen): For the powerful base models.
 
 ## Citation
 
