@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE-Router: Generalizing History-Aware Routing from MCP Tools to the Agent Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafbfc;
+            color: #2c3e50;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #4a148c 100%);
+            padding: 80px 20px 100px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Animated grid background */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .authors {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .authors span {
+            white-space: nowrap;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            cursor: default;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 70px 0;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Abstract */
+        .abstract {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .abstract p {
+            font-size: 1.05rem;
+            color: #444;
+            text-align: justify;
+            line-height: 1.9;
+        }
+
+        .abstract p::first-letter {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            float: left;
+            line-height: 1;
+            margin-right: 8px;
+            margin-top: 4px;
+        }
+
+        /* Framework */
+        .framework-section {
+            text-align: center;
+        }
+
+        .framework-img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .framework-img:hover {
+            transform: scale(1.02);
+        }
+
+        .framework-caption {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Highlights */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .highlight-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .highlight-card .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .highlight-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .highlight-card p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Citation */
+        .citation-section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .citation-block {
+            position: relative;
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .citation-block pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #e0e0e0;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Acknowledgement */
+        .ack-section {
+            text-align: center;
+            padding-bottom: 80px;
+        }
+
+        .ack-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .ack-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .ack-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #1a1a2e;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            section {
+                padding: 50px 0;
+            }
+
+            .abstract {
+                padding: 24px;
+            }
+
+            .highlights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ack-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>ACE-Router</h1>
+            <p class="subtitle">Generalizing History-Aware Routing from MCP Tools to the Agent Web</p>
+            <div class="badge">ACL 2026 Main Conference (Oral)</div>
+            <p class="authors">
+                <span>Zhiyuan Yao</span> &middot;
+                <span>Zishan Xu</span> &middot;
+                <span>Yifu Guo</span> &middot;
+                <span>Zhiguang Han</span> &middot;
+                <span>Cheng Yang</span> &middot;
+                <span>Shuo Zhang</span> &middot;
+                <span>Weinan Zhang</span> &middot;
+                <span>Xingshan Zeng</span> &middot;
+                <span>Weiwen Liu</span>
+            </p>
+            <div class="buttons">
+                <a href="https://arxiv.org/abs/2601.08276" class="btn btn-primary" target="_blank">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    Paper
+                </a>
+                <a href="https://github.com/euyis1019/ACE-Router" class="btn btn-outline" target="_blank">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    Code
+                </a>
+                <span class="btn btn-disabled">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Data (Coming Soon)
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Abstract -->
+    <section>
+        <div class="container fade-in">
+            <h2 class="section-title">Abstract</h2>
+            <div class="abstract">
+                <p>With the rise of the Agent Web and Model Context Protocol (MCP), the agent ecosystem is evolving into an open collaborative network, exponentially increasing accessible tools. However, current architectures face severe scalability and generality bottlenecks. To address this, we propose ACE-Router, a pipeline for training history-aware routers to empower precise navigation in large-scale ecosystems. By leveraging a dependency-rich candidate Graph to synthesize multi-turn trajectories, we effectively train routers with dynamic context understanding to create the plug-and-play Light Routing Agent. Experiments on the real-world benchmarks MCP-Universe and MCP-Mark demonstrate superior performance. Notably, ACE-Router exhibits critical properties for the future Agent Web: it not only generalizes to multi-agent collaboration with minimal adaptation but also maintains exceptional robustness against noise and scales effectively to massive candidate spaces. These findings provide a strong empirical foundation for universal orchestration in open-ended ecosystems.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Framework -->
+    <section>
+        <div class="container fade-in framework-section">
+            <h2 class="section-title">Framework</h2>
+            <img src="assets/framework.png" alt="ACE-Router Framework" class="framework-img">
+            <p class="framework-caption">Overview of the ACE-Router pipeline: Self-Evolutionary Mutation, Graph Construction, Multi-Agent Simulation, and Light Routing Agent inference.</p>
+        </div>
+    </section>
+
+    <!-- Key Highlights -->
+    <section>
+        <div class="container fade-in">
+            <h2 class="section-title">Key Highlights</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="icon">&#127760;</div>
+                    <h3>Self-Evolutionary Graph Construction</h3>
+                    <p>Expands and structures the candidate space via mutation and relation modeling, creating rich dependency graphs.</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="icon">&#129302;</div>
+                    <h3>Multi-Agent Simulation</h3>
+                    <p>Synthesizes interaction trajectories to extract history-aware supervision signals for router training.</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="icon">&#9889;</div>
+                    <h3>Light Routing Agent</h3>
+                    <p>A plug-and-play module that seamlessly integrates the trained router into existing agent pipelines.</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="icon">&#128256;</div>
+                    <h3>Cross-domain Transferability</h3>
+                    <p>A router trained solely on tool data generalizes to multi-agent collaboration with minimal adaptation.</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="icon">&#128170;</div>
+                    <h3>Robustness &amp; Scalability</h3>
+                    <p>Maintains exceptional robustness against noise and scales effectively to massive candidate spaces.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Citation -->
+    <section>
+        <div class="container fade-in">
+            <h2 class="section-title">Citation</h2>
+            <div class="citation-section">
+                <p style="color: #666; margin-bottom: 10px;">If you find ACE-Router useful in your research, please consider citing:</p>
+                <div class="citation-block">
+                    <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+                    <pre id="bibtex">@misc{acerouter2026,
+  title={ACE-Router: Generalizing History-Aware Routing from MCP Tools to the Agent Web},
+  author={Zhiyuan Yao and Zishan Xu and Yifu Guo and Zhiguang Han and Cheng Yang and
+          Shuo Zhang and Weinan Zhang and Xingshan Zeng and Weiwen Liu},
+  year={2026},
+  eprint={2601.08276},
+  archivePrefix={arXiv},
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Acknowledgement -->
+    <section class="ack-section">
+        <div class="container fade-in">
+            <h2 class="section-title" style="display: block; text-align: center;">Acknowledgement</h2>
+            <div style="text-align: center;"><div class="section-title" style="display: none;"></div></div>
+            <div class="ack-links">
+                <a href="https://github.com/SalesforceAIResearch/MCP-Universe" class="ack-item" target="_blank">
+                    &#128640; MCP-Universe
+                </a>
+                <a href="https://github.com/eval-sys/mcpmark" class="ack-item" target="_blank">
+                    &#128202; MCPMark
+                </a>
+                <a href="https://github.com/hiyouga/LLaMA-Factory" class="ack-item" target="_blank">
+                    &#9881;&#65039; LLaMA-Factory
+                </a>
+                <a href="https://github.com/QwenLM/Qwen" class="ack-item" target="_blank">
+                    &#129504; Qwen
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>ACE-Router &copy; 2026. This page is hosted on GitHub Pages.</p>
+    </footer>
+
+    <script>
+        // Copy BibTeX
+        function copyBibtex() {
+            const text = document.getElementById('bibtex').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+            });
+        }
+
+        // Scroll fade-in animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
